@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\pta"
   ],
+  "SelectedNode": "\\src\\pta\\main.py",
   "PreviewInSolutionExplorer": false
 }
