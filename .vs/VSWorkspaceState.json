@@ -2,7 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\pta"
+    "\\src\\pta",
+    "\\src\\pta\\capture"
   ],
   "SelectedNode": "\\src\\pta\\main.py",
   "PreviewInSolutionExplorer": false
