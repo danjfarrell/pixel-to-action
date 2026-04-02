@@ -1,17 +1,23 @@
+"""Pixel-to-Action entry point.
+
+Runs the first two stages of the autonomy pipeline:
+    ScreenCapture -> PerceptionModule -> (state, policy, control coming later)
+"""
+
 from capture.screen_capture import ScreenCapture
-import cv2
+from perception.base import NullPerception
 
-def main():
-    print("Pixel-to-Action")
-    print("Status: scaffold created")
-    print("current step: implementing screen capture module")
+
+def main() -> None:
     capture = ScreenCapture()
-    frame = capture.get_frame()
+    perception = NullPerception()
 
-    if frame is not None:
-        print("Frame captured successfully.")
-    else:
-        print("Frame capture failed.")
+    frame = capture.get_frame()
+    result = perception.process(frame)
+
+    print(f"feature_detected : {result['feature_detected']}")
+    print(f"detections       : {result['detections']}")
+    print(f"metadata         : {result['metadata']}")
 
 
 if __name__ == "__main__":
