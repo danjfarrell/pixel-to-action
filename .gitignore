@@ -2,3 +2,14 @@
 .venv/
 venv/
 env/
+*.db
+*.db
+*.vsidx
+/.vs/pixel-to-action/CopilotIndices
+/.vs/pixel-to-action/FileContentIndex
+/.vs/pixel-to-action/v17
+.vs/ProjectSettings.json
+.vs/PythonSettings.json
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+/env1
