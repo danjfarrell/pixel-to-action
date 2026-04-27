@@ -3,7 +3,13 @@
     "",
     "\\src",
     "\\src\\pta",
-    "\\src\\pta\\capture"
+    "\\src\\pta\\games",
+    "\\src\\pta\\games\\sample_games",
+    "\\src\\pta\\games\\zelda",
+    "\\src\\pta\\percepection",
+    "\\src\\pta\\policy",
+    "\\src\\pta\\state",
+    "\\src\\pta\\tools"
   ],
   "SelectedNode": "\\src\\pta\\main.py",
   "PreviewInSolutionExplorer": false
