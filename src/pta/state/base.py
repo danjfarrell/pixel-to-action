@@ -24,7 +24,7 @@ class StateBuilder(ABC):
 
     Each subclass knows how to interpret a specific game's perception output
     and convert it into a clean GameState dict. The policy layer depends only
-    on GameState — it never sees raw detections.
+    on GameState - it never sees raw detections.
 
     Subclasses must implement:
         build(perception_result) -> GameState

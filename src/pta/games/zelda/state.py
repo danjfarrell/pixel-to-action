@@ -2,7 +2,7 @@
 
 Converts perception detections into a structured GameState for
 The Legend of Zelda (NES). This is the only module allowed to know
-Zelda-specific concepts — the rest of the pipeline stays generic.
+Zelda-specific concepts - the rest of the pipeline stays generic.
 """
 
 from __future__ import annotations
@@ -24,8 +24,8 @@ class ZeldaStateBuilder(StateBuilder):
         health_ratio (float): Approximate health as a fraction of full hearts.
 
     Expected perception labels:
-        "heart_full" — a completely filled heart
-        "heart_half" — a half-filled heart
+        "heart_full" - a completely filled heart
+        "heart_half" - a half-filled heart
 
     Any labels not listed above are ignored, making this robust to
     perception modules that detect additional features.

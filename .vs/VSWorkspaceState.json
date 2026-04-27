@@ -1,12 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\perception_na",
     "\\src",
     "\\src\\pta",
     "\\src\\pta\\games",
-    "\\src\\pta\\games\\sample_games",
     "\\src\\pta\\games\\zelda",
-    "\\src\\pta\\percepection",
+    "\\src\\pta\\perception",
     "\\src\\pta\\policy",
     "\\src\\pta\\state",
     "\\src\\pta\\tools"

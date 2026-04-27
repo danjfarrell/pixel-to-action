@@ -1,6 +1,6 @@
 """Policy base classes for the decision-making layer.
 
-A Policy consumes a GameState and returns an Action — a structured
+A Policy consumes a GameState and returns an Action - a structured
 description of what the controller should do next.
 """
 

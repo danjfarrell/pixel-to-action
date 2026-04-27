@@ -26,7 +26,7 @@ from pta.capture.screen_capture import ScreenCapture
 
 
 # ------------------------------------------------------------------
-# Selection state — shared between mouse callback and main loop
+# Selection state - shared between mouse callback and main loop
 # ------------------------------------------------------------------
 
 class _Selection:
@@ -135,7 +135,7 @@ def _save_crop(frame: np.ndarray, sel: _Selection, output_path: Path) -> bool:
     crop = frame[y : y + h, x : x + w]
 
     if crop.size == 0:
-        print("Selection has zero area — nothing to save.")
+        print("Selection has zero area - nothing to save.")
         return False
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
