@@ -10,6 +10,8 @@ import logging
 import time
 
 import cv2
+import pygetwindow as gw
+import win32gui
 
 from capture.screen_capture import ScreenCapture
 from control.base import NullController
@@ -40,12 +42,41 @@ CONFIG = {
     "controller": NullController(),
     "target_fps": 30,
     "region":     None,  # (x, y, w, h) or None for full screen
+    "auto_detect_emulator": True,       # set False to use capture_region instead
+    "emulator_title": "RetroArch",
 }
 # -----------------------------------------------------------------------------
 
+def get_emulator_region(title: str) -> tuple:
+    wins = gw.getWindowsWithTitle(title)
+    if not wins:
+        raise RuntimeError(f"Window '{title}' not found - is it running?")
+    win = wins[0]
+    win.activate()
+    time.sleep(0.1)
+
+    hwnd = win32gui.FindWindow(None, win.title)
+    rect = win32gui.GetClientRect(hwnd)          # (0, 0, width, height) relative
+    point = win32gui.ClientToScreen(hwnd, (0, 0)) # top-left in screen coords
+    left_offset = 10    # trim left edge
+    top_offset = 30     # trim title bar + menu bar
+    x, y = point
+    w = rect[2]
+    h = rect[3] 
+    logger.info(f"Detected '{CONFIG['emulator_title']}' at region {x, y, w, h}")
+
+    return (x, y, w, h)
 
 def main() -> None:
-    capture = ScreenCapture(region=CONFIG["region"])
+
+    # Resolve capture region
+    if CONFIG["auto_detect_emulator"]:
+        region = get_emulator_region(CONFIG["emulator_title"])
+        logger.info(f"Detected '{CONFIG['emulator_title']}' at region {region}")
+    else:
+        region = CONFIG["region"]  # may be None (full screen)
+    capture = ScreenCapture(region=region)
+    logger.info(f"ScreenCapture region: {capture._region}")
     perception = CONFIG["perception"]
     state_builder = CONFIG["state"]
     policy = CONFIG["policy"]
@@ -62,7 +93,7 @@ def main() -> None:
 
             frame = capture.get_frame()
             result = perception.process(frame)
-            state = state_builder.update(result)
+            state = state_builder.build(result)
             action = policy.decide(state)
             controller.execute(action)
 

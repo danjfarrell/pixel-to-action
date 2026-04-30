@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\perception_na",
     "\\src",
     "\\src\\pta",
+    "\\src\\pta\\capture",
     "\\src\\pta\\games",
     "\\src\\pta\\games\\zelda",
     "\\src\\pta\\perception",
@@ -11,6 +11,6 @@
     "\\src\\pta\\state",
     "\\src\\pta\\tools"
   ],
-  "SelectedNode": "\\src\\pta\\main.py",
+  "SelectedNode": "\\src\\pta\\tools",
   "PreviewInSolutionExplorer": false
 }
