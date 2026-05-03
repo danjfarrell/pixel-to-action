@@ -10,8 +10,11 @@ import logging
 import time
 
 import cv2
+import ctypes
 import pygetwindow as gw
 import win32gui
+#from win32gui import GetClientRect, ClientToScreen
+
 
 from capture.screen_capture import ScreenCapture
 from control.base import NullController
@@ -22,6 +25,12 @@ from policy.base import NullPolicy
 from games.zelda.policy import ZeldaPolicy  # noqa: F401
 from games.zelda.state import ZeldaStateBuilder
 from state.base import NullStateBuilder
+
+# 1. Force the process to be DPI aware (CRITICAL for Windows 10/11)
+try:
+    ctypes.windll.shcore.SetProcessDpiAwareness(1)
+except Exception:
+    ctypes.windll.user32.SetProcessDPIAware()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -43,7 +52,7 @@ CONFIG = {
     "target_fps": 30,
     "region":     None,  # (x, y, w, h) or None for full screen
     "auto_detect_emulator": True,       # set False to use capture_region instead
-    "emulator_title": "RetroArch",
+    "emulator_title": "RetroArch QuickNES 1.0-WIP 7178256",  #RetroArch QuickNES 1.0-WIP 7178256
 }
 # -----------------------------------------------------------------------------
 
@@ -55,16 +64,26 @@ def get_emulator_region(title: str) -> tuple:
     win.activate()
     time.sleep(0.1)
 
+    # hwnd = win32gui.FindWindow(None, win.title)
+    # rect = win32gui.GetClientRect(hwnd)          # (0, 0, width, height) relative
+    # point = win32gui.ClientToScreen(hwnd, (0, 0)) # top-left in screen coords
+    # left_offset = 10    # trim left edge
+    # top_offset = 30     # trim title bar + menu bar
+    # x, y = point
+    # w = rect[2]
+    # h = rect[3] 
+    # logger.info(f"Detected '{CONFIG['emulator_title']}' at region {x, y, w, h}")
     hwnd = win32gui.FindWindow(None, win.title)
-    rect = win32gui.GetClientRect(hwnd)          # (0, 0, width, height) relative
-    point = win32gui.ClientToScreen(hwnd, (0, 0)) # top-left in screen coords
-    left_offset = 10    # trim left edge
-    top_offset = 30     # trim title bar + menu bar
-    x, y = point
-    w = rect[2]
-    h = rect[3] 
-    logger.info(f"Detected '{CONFIG['emulator_title']}' at region {x, y, w, h}")
-
+    
+    # Get the internal dimensions
+    rect = win32gui.GetClientRect(hwnd)
+    w, h = rect[2], rect[3]
+    
+    # Get the EXACT screen coordinates of the top-left pixel of the client area
+    # This bypasses the need for manual "top_offset" or "left_offset"
+    x, y = win32gui.ClientToScreen(hwnd, (0, 0))
+    
+    logger.info(f"Detected region: x={x}, y={y}, w={w}, h={h}")
     return (x, y, w, h)
 
 def main() -> None:
