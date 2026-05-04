@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\src",
+    "\\src\\assets",
+    "\\src\\assets\\templates",
     "\\src\\pta",
-    "\\src\\pta\\capture",
     "\\src\\pta\\games",
     "\\src\\pta\\games\\zelda",
     "\\src\\pta\\perception",

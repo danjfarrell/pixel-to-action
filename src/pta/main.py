@@ -14,6 +14,7 @@ import ctypes
 import pygetwindow as gw
 import win32gui
 #from win32gui import GetClientRect, ClientToScreen
+from pathlib import Path
 
 
 from capture.screen_capture import ScreenCapture
@@ -35,6 +36,9 @@ except Exception:
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+BASE_DIR = Path(__file__).parent.parent  # src/pta/ -> src/ -> repo root
+TEMPLATES = BASE_DIR / "assets" / "templates"
+
 # --- Configuration -----------------------------------------------------------
 # Default: safe no-op mode. Nothing is sent to the keyboard.
 #
@@ -45,9 +49,19 @@ logger = logging.getLogger(__name__)
 #   "controller": KeyboardController(),
 #
 CONFIG = {
-    "perception": NullPerception(),
-    "state":      NullStateBuilder(),
-    "policy":     NullPolicy(),
+    #"perception": NullPerception(),
+    #"state":      NullStateBuilder(),
+    #"policy":     NullPolicy(),
+    "perception": TemplateMatchPerception(
+        templates={
+            "heart_full": TEMPLATES / "heart_full.png",
+            "heart_half": TEMPLATES / "heart_half.png",
+        },
+        threshold=0.8,
+        region=None,  # TODO: set to HUD sub-region once calibrated
+    ),
+    "state":      ZeldaStateBuilder(),
+    "policy":     ZeldaPolicy(),
     "controller": NullController(),
     "target_fps": 30,
     "region":     None,  # (x, y, w, h) or None for full screen
