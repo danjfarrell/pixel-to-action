@@ -25,6 +25,7 @@ from perception.template_match import TemplateMatchPerception  # noqa: F401
 from policy.base import NullPolicy
 from games.zelda.policy import ZeldaPolicy  # noqa: F401
 from games.zelda.state import ZeldaStateBuilder
+from games.zelda.perception import build_hud_detector, build_link_detector
 from state.base import NullStateBuilder
 
 # 1. Force the process to be DPI aware (CRITICAL for Windows 10/11)
@@ -60,6 +61,7 @@ CONFIG = {
         threshold=0.8,
         region=None,  # TODO: set to HUD sub-region once calibrated
     ),
+    "perception_link": build_link_detector(),
     "state":      ZeldaStateBuilder(),
     "policy":     ZeldaPolicy(),
     "controller": NullController(),
@@ -69,6 +71,37 @@ CONFIG = {
     "emulator_title": "RetroArch QuickNES 1.0-WIP 7178256",  #RetroArch QuickNES 1.0-WIP 7178256
 }
 # -----------------------------------------------------------------------------
+
+
+def merge_perception(*results: PerceptionResult) -> PerceptionResult:
+    """Merge multiple PerceptionResults into one for the state builder.
+
+    Combines all detection lists. feature_detected is True if any
+    module fired. Metadata dicts are merged with later entries winning
+    on key collision.
+
+    Args:
+        *results: One PerceptionResult per active perception module.
+
+    Returns:
+        Single merged PerceptionResult.
+    """
+    merged_detections = []
+    any_detected = False
+    merged_metadata: dict = {}
+
+    for r in results:
+        merged_detections.extend(r.get("detections", []))
+        any_detected = any_detected or r.get("feature_detected", False)
+        merged_metadata.update(r.get("metadata", {}))
+
+    return {
+        "feature_detected": any_detected,
+        "detections":       merged_detections,
+        "metadata":         merged_metadata,
+    }
+
+
 
 def get_emulator_region(title: str) -> tuple:
     wins = gw.getWindowsWithTitle(title)
