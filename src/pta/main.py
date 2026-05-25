@@ -34,7 +34,13 @@ try:
 except Exception:
     ctypes.windll.user32.SetProcessDPIAware()
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(    
+    level=logging.INFO,
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler("logs/pta.log"),
+    ],
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",)
 logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).parent.parent  # src/pta/ -> src/ -> repo root
@@ -58,8 +64,9 @@ CONFIG = {
             "heart_full": TEMPLATES / "heart_full.png",
             "heart_half": TEMPLATES / "heart_half.png",
         },
-        threshold=0.8,
-        region=None,  # TODO: set to HUD sub-region once calibrated
+        threshold=0.92,
+        #region=(590, 110, 80, 26),  # TODO: set to HUD sub-region once calibrated
+        region = None,
     ),
     "perception_link": build_link_detector(),
     "state":      ZeldaStateBuilder(),
@@ -158,8 +165,15 @@ def main() -> None:
             t0 = time.monotonic()
 
             frame = capture.get_frame()
-            result = perception.process(frame)
-            state = state_builder.build(result)
+            #result = perception.process(frame)
+            #state = state_builder.build(result)
+            result_hud  = perception.process(frame)
+            result_link = CONFIG["perception_link"].process(frame)
+            logger.info("link_blobs=%s", result_link["metadata"])
+
+            result      = merge_perception(result_hud, result_link)
+            state       = state_builder.build(result)
+            logger.info("state=%s", state)
             action = policy.decide(state)
             controller.execute(action)
 

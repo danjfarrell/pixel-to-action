@@ -41,8 +41,12 @@ _ASSETS = Path(__file__).parent.parent.parent.parent / "assets"
 # ---------------------------------------------------------------------------
 # HSV defaults for Link's tunic (tune to your palette/emulator settings)
 # ---------------------------------------------------------------------------
-_LINK_HSV_LOWER = (68, 120, 80)
-_LINK_HSV_UPPER = (85, 255, 200)
+#_LINK_HSV_LOWER = (68, 120, 80)
+#_LINK_HSV_UPPER = (85, 255, 200)
+#_LINK_HSV_LOWER = (55, 100, 80)
+#_LINK_HSV_UPPER = (90, 255, 220)
+_LINK_HSV_LOWER = (15, 220, 156)
+_LINK_HSV_UPPER = (41, 255, 239)
 _LINK_MIN_AREA = 60   # pixels; Link's sprite is ~16x16 = 256px at 1x
 
 # HUD strip height in pixels (NES: top ~56px are HUD, play area below)
