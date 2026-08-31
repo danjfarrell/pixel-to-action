@@ -64,7 +64,7 @@ CONFIG = {
             "heart_full": TEMPLATES / "heart_full.png",
             "heart_half": TEMPLATES / "heart_half.png",
         },
-        threshold=0.92,
+        threshold=0.90,
         #region=(590, 110, 80, 26),  # TODO: set to HUD sub-region once calibrated
         region = None,
     ),
